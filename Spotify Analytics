@@ -1,0 +1,61 @@
+-- For this project, I downloaded Spotify data from Kaggle.
+-- Then I created a table to insert Spotify data into.
+-- Finally, I performed analytics on the data using SQL.
+
+-- Creating the table: 
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness text NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL 
+)
+
+-- Then I inserted the Spotify Data .csv into the table.
+
+-- Next, I explored the data using the following SQL. 
+
+-- First, I assigned tempo markings based on the tempo of the songs.
+SELECT track_name, tempo,
+CASE WHEN TEMPO > 168 THEN 'VERY FAST'
+WHEN TEMPO > 120 THEN 'FAST'
+WHEN TEMPO > 108 THEN 'MODERATELY'
+WHEN TEMPO > 76 THEN 'WALKING PAC'
+ELSE "SLOW"
+END AS tempo_markings
+FROM BIT_DB.Spotifydata
+ORDER BY tempo DESC;
+
+-- Secondly, I found the top 10 artists based on popularity.
+
+SELECT track_name, artist_name
+FROM BIT_DB.Spotifydata
+ORDER BY popularity DESC
+LIMIT 10;
+
+-- Then, I determined the average danceability and energy for a Dua Lipa song.
+
+SELECT artist_name ,avg(danceability), avg(energy)
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+HAVING artist_name = 'Dua Lipa';
+
+-- Finally, I determined which artist had the longest song.
+
+SELECT artist_name
+FROM BIT_DB.Spotifydata
+ORDER BY duration_ms DESC
+LIMIT 1;
